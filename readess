@@ -1,0 +1,31 @@
+#!/bin/bash
+password=d84fb802056d
+
+essread () {
+  _brokerstate=0_userdata.0.solar.$1
+  
+  case $1 in # sets _searchparam for iobroker
+    bat_charge)
+      _searchparam=.home.statistics.bat_user_soc
+      ;;
+    pv_in)
+      _searchparam=.home.statistics.pcs_pv_total_power
+      ;;
+    usage)
+      _searchparam=.home.statistics.load_power
+      ;;
+    *)
+      exit ;;
+    esac
+
+
+  query_value=$(esscli --password $password --action get_data | jq $_searchparam )
+  output=${query_value:1:-1}
+  iobroker state set $_brokerstate $output
+}
+
+
+# Sets Iobroker states
+essread pv_in
+essread bat_charge
+essread usage
