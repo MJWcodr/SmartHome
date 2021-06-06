@@ -1,5 +1,5 @@
 #!/bin/bash
-password=d84fb802056d
+password= 
 
 essread () {
   _brokerstate=0_userdata.0.solar.$1
